@@ -10,9 +10,19 @@ const parameters = {
   materialColor: '#ffeded',
 }
 
-gui.addColor(parameters, 'materialColor').onChange(() => {
-  material.color.set(parameters.materialColor)
-})
+gui
+  .addColor(parameters, 'materialColor')
+  .name('Objects Colour')
+  .onChange(() => {
+    material.color.set(parameters.materialColor)
+  })
+
+gui
+  .addColor(parameters, 'materialColor')
+  .name('Particles Colour')
+  .onChange(() => {
+    particlesMaterial.color.set(parameters.materialColor)
+  })
 
 /**
  * Base
@@ -66,10 +76,14 @@ scene.add(mesh1, mesh2, mesh3)
 const particlesCount = 200
 const positions = new Float32Array(particlesCount * 3)
 
+const sectionMeshes = [mesh1, mesh2, mesh3]
+
 for (let i = 0; i < particlesCount; i++) {
-  positions[i * 3 + 0] = Math.random() - .5
-  positions[i * 3 + 1] = Math.random()
-  positions[i * 3 + 2] = Math.random() - .5
+  positions[i * 3 + 0] = (Math.random() - 0.5) * 10
+  positions[i * 3 + 1] =
+    objectsDistance * 0.5 -
+    Math.random() * objectsDistance * sectionMeshes.length
+  positions[i * 3 + 2] = (Math.random() - 0.5) * 10
 }
 
 const particlesGeometry = new THREE.BufferGeometry()
@@ -98,8 +112,6 @@ const directionalLight = new THREE.DirectionalLight('#ffffff', 1)
 directionalLight.position.set(1, 1, 0)
 
 scene.add(directionalLight)
-
-const sectionMeshes = [mesh1, mesh2, mesh3]
 
 /**
  * Sizes
